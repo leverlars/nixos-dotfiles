@@ -52,6 +52,9 @@
     #amdgpuBusId = "PCI:54:0:0"; # If you have an AMD iGPU
   };
 
+  networking.networkmanager.wifi.backend = "wpa_supplicant";
+  networking.useNetworkd = false;
+
   services.blueman.enable = true;
 
   services.thermald.enable = true;
@@ -150,6 +153,7 @@
     shotman
     gh
     sublime
+    vscode
 
     #themes and waybar
     sassc
@@ -176,6 +180,8 @@
     zip
     yt-dlp
     gnupg
+    pciutils
+    usbutils
 
     # VPN
     protonvpn-gui
@@ -197,6 +203,10 @@
     probe-rs-tools
     espflash
     texliveFull
+    gcc
+    lldb
+    rars
+    gnumake
     # openjdk15
 
     # util-apps
@@ -206,7 +216,7 @@
     keepassxc
     neofetch
     fastfetch
-    discord
+    discord-canary
     steam
     gamescope
     vulkan-tools
@@ -218,6 +228,11 @@
     gimp
     gammastep
     brave
+    gnome-calculator
+    ghex
+    wxhexeditor
+    gnome-screenshot
+    networkmanagerapplet
 
     # audio-control
     pavucontrol
@@ -250,6 +265,8 @@
     "nix-command"
     "flakes"
   ];
+
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -285,7 +302,7 @@
   
   # VirtualBox
   virtualisation.virtualbox.host.enable = true;   # pulls in the kernel modules
-  boot.kernelModules = [ "vboxdrv" "vboxnetflt" "vboxnetadp" ];
+  boot.kernelModules = [ "vboxdrv" "vboxnetflt" "vboxnetadp" "thunderbolt" ];
   virtualisation.libvirtd.enable = true;
   users.extraUsers.leverlars = {
     isNormalUser = true;

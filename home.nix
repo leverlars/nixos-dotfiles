@@ -83,6 +83,21 @@ in
   #	systemd.enable = true;
   #};
 
+  services.gammastep = {
+    enable = true;
+    temperature = {
+      day = 6500;
+      night = 1250;
+    };
+    brightness = {
+      day = "1";
+      night = "0.69";
+    };
+    provider = "manual";
+    latitude = 56.3;
+    longitude = 9.5;
+  };
+
   programs.helix = {
     enable = true;
     package = pkgs.evil-helix;
