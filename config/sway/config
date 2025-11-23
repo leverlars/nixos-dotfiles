@@ -28,7 +28,7 @@ client.focused "7aa2f7" "7aa2f7" "7aa2f7" "bb9af7"
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
-output * bg  /home/lumo/.local/share/backgrounds/tokyonight_original.png fill
+output * bg  /home/leverlars/.local/share/backgrounds/tokyonight_original.png fill
 #
 # Example configuration:
 #
@@ -40,11 +40,11 @@ output * bg  /home/lumo/.local/share/backgrounds/tokyonight_original.png fill
 #
 # Example configuration:
 #
-# exec swayidle -w \
-#          timeout 300 'swaylock -f -c 000000' \
-#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
-#          before-sleep 'swaylock -f -c 000000'
-#
+exec swayidle -w \
+         timeout 3000 'swaylock -f -e -c 232323' \
+         timeout 6000 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+         before-sleep 'swaylock -f -e -c 232323'
+
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
 # resumed. It will also lock your screen before your computer goes to sleep.
@@ -82,6 +82,7 @@ output * bg  /home/lumo/.local/share/backgrounds/tokyonight_original.png fill
 
     bindsym $mod+f exec thunar
 
+    bindsym $mod+p exec swaylock -f -e -c 232323
 
     bindsym Print  exec shotman -c window
     bindsym Print+Shift  exec shotman -c region

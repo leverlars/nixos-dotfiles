@@ -198,7 +198,8 @@
     ranger
     newsboat
     zathura
-
+    gimp
+    
     # audio-control
     pavucontrol
     helvum
