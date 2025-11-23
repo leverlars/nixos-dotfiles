@@ -21,8 +21,6 @@ in
   home.username = "leverlars";
   home.homeDirectory = "/home/leverlars";
 
-  programs.git.enable = true;
-
   programs.swaylock.enable = true;
   home.stateVersion = "25.05";
   #programs.bash = {
@@ -32,6 +30,8 @@ in
   home.packages = with pkgs; [
     neovim
     gcc
+    nixfmt-rfc-style
+    evil-helix
   ];
 
   home.sessionVariables = {
@@ -69,6 +69,12 @@ in
 
   };
 
+  programs.git = {
+    enable = true;
+    userName = "leverlars";
+    userEmail = "oskarjo@pm.me";
+  };
+
   home.keyboard.layout = "dk";
 
   #programs.waybar = {
@@ -76,30 +82,30 @@ in
   #	systemd.enable = true;
   #};
 
-  programs.helix = {
-    enable = true;
-    settings = {
-      theme = "tokyonight_transparent";
-      editor.cursor-shape = {
-        normal = "block";
-        insert = "bar";
-        select = "underline";
-      };
-    };
-    languages.language = [
-      {
-        name = "nix";
-        auto-format = true;
-        formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
-      }
-    ];
-    themes = {
-      tokyonight_transparent = {
-        "inherits" = "tokyonight";
-        "ui.background" = { };
-      };
-    };
-  };
+  #programs.helix = {
+  #  enable = true;
+  #  settings = {
+  #    theme = "tokyonight_transparent";
+  #    editor.cursor-shape = {
+  #      normal = "block";
+  #      insert = "bar";
+  #      select = "underline";
+  #    };
+  #  };
+  #  languages.language = [
+  #    {
+  #      name = "nix";
+  #      auto-format = true;
+  #      formatter.command = lib.getExe pkgs.nixfmt-rfc-style;
+  #    }
+  #  ];
+  #  themes = {
+  #    tokyonight_transparent = {
+  #      "inherits" = "tokyonight";
+  #      "ui.background" = { };
+  #    };
+  #  };
+ # };
 
   xdg.configFile = builtins.mapAttrs (name: subpath: {
     source = create_symlink "${dotfiles}/${subpath}";
