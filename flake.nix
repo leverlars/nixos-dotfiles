@@ -1,4 +1,3 @@
-
 {
 	description = "NixOS from Scratch";
 	inputs = {
@@ -16,7 +15,6 @@
 				./configuration.nix
 				home-manager.nixosModules.home-manager
 				{
-					
 					home-manager = {
 						useGlobalPkgs = true;
 						useUserPackages = true;

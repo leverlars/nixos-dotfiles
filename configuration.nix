@@ -1,7 +1,5 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
+# Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
 {
   config,
   pkgs,
@@ -11,22 +9,19 @@
 
 {
   imports = [
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
   ];
 
-  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  # Enable networking
   networking.networkmanager.enable = true;
 
   hardware.bluetooth = {
@@ -34,18 +29,10 @@
     powerOnBoot = true;
     settings = {
       General = {
-        # Shows battery charge of connected devices on supported
-        # Bluetooth adapters. Defaults to 'false'.
         Experimental = true;
-        # When enabled other devices can connect faster to us, however
-        # the tradeoff is increased power consumption. Defaults to
-        # 'false'.
         FastConnectable = true;
       };
       Policy = {
-        # Enable all controllers when they are found. This includes
-        # adapters present on start as well as adapters that are plugged
-        # in later on. Defaults to 'true'.
         AutoEnable = true;
       };
     };
@@ -58,10 +45,8 @@
 
   zramSwap.enable = true;
 
-  # Set your time zone.
   time.timeZone = "Europe/Copenhagen";
 
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_DK.UTF-8";
 
   i18n.extraLocaleSettings = {
@@ -76,7 +61,6 @@
     LC_TIME = "da_DK.UTF-8";
   };
 
-  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "dk";
     variant = "";
@@ -86,7 +70,6 @@
     enable = true;
     autoRepeatDelay = 200;
     autoRepeatInterval = 35;
-    #	windowManager.qtile.enable = true;
   };
   services.displayManager.ly.enable = true;
 
@@ -103,10 +86,8 @@
 
   };
 
-  # Configure console keymap
   console.keyMap = "dk-latin1";
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.leverlars = {
     isNormalUser = true;
     description = "leverlars";
@@ -136,11 +117,9 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
     #jack.enable = true;
   };
 
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
@@ -263,18 +242,18 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    ports = [ 5342 ];
+  # services.openssh = {
+  #   enable = true;
+  #   ports = [ 5342 ];
 
-    settings = {
+  #   settings = {
 
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "no";
-      AllowUsers = [ "leverlars" ];
-    };
-  };
+  #     PasswordAuthentication = false;
+  #     KbdInteractiveAuthentication = false;
+  #     PermitRootLogin = "no";
+  #     AllowUsers = [ "leverlars" ];
+  #   };
+  # };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -284,12 +263,7 @@
 
   networking.firewall.checkReversePath = "loose";
 
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05"; # Did you read the comment?
-
+  system.stateVersion = "25.05";
 }

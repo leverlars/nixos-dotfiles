@@ -14,7 +14,6 @@ let
     kitty = "kitty";
     # helix = "helix";
     Thunar = "Thunar";
-
   };
 
 in
@@ -31,7 +30,6 @@ in
   #};
 
   home.packages = with pkgs; [
-
     neovim
     gcc
   ];
@@ -45,9 +43,7 @@ in
     enable = true;
     theme.name = "Tokyonight-Dark";
     theme.package = pkgs.tokyonight-gtk-theme;
-
     iconTheme.name = "Tokyonight-Dark";
-
   };
 
   qt = {
@@ -59,12 +55,10 @@ in
     enable = true;
     enableAutosuggestions = true;
     enableCompletion = true;
-
     syntaxHighlighting.enable = true;
 
     shellAliases = {
       btw = "fastfetch && echo I use NixOS, btw";
-
       update = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#nixos";
     };
 
