@@ -28,7 +28,8 @@ client.focused "7aa2f7" "7aa2f7" "7aa2f7" "bb9af7"
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /run/current-system/sw/share/backgrounds/sway/)
-output * bg  /home/leverlars/.local/share/backgrounds/tokyonight_original.png fill
+output * bg  /home/leverlars/nixos-dotfiles/config/sway/lantern.jpg fill
+#output * bg  /home/leverlars/.local/share/backgrounds/tokyonight_original.png fill
 #
 # Example configuration:
 #
@@ -59,6 +60,11 @@ exec swayidle -w \
        natural_scroll enabled
        middle_emulation enabled
    }
+
+  input * {
+      xkb_options caps:swapescape
+  }
+   
 #
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.

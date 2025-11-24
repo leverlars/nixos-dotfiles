@@ -64,6 +64,7 @@
   services.xserver.xkb = {
     layout = "dk";
     variant = "";
+    options = "caps:swapescape";
   };
 
   services.xserver = {
@@ -199,6 +200,8 @@
     newsboat
     zathura
     gimp
+    gammastep
+    brave
     
     # audio-control
     pavucontrol

@@ -41,9 +41,9 @@ in
 
   gtk = {
     enable = true;
-    theme.name = "Tokyonight-Dark";
-    theme.package = pkgs.tokyonight-gtk-theme;
-    iconTheme.name = "Tokyonight-Dark";
+    theme.name = "Gruvbox-Dark";
+    theme.package = pkgs.gruvbox-dark-gtk;
+    iconTheme.name = "Gruvbox-Dark";
   };
 
   qt = {
