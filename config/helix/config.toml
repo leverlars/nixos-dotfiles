@@ -1,4 +1,4 @@
-theme = "tokyonight_transparent"
+theme = "gruvbox_transparent"
 
 [editor]
 cursor-shape.normal   = "block"
@@ -12,6 +12,6 @@ auto-format = true
 [languages.formatter]
 command = "/nix/store/0j6c8z9x5w7g6v0y8r9k1b2a3c4d5e6f-nixfmt/bin/nixfmt"
 
-[themes.tokyonight_transparent]
-inherits = "tokyonight"
+[themes.gruvbox_transparent]
+inherits = "gruvbox"
 ui.background = {}
