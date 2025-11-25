@@ -202,7 +202,7 @@
     gimp
     gammastep
     brave
-    
+
     # audio-control
     pavucontrol
     helvum

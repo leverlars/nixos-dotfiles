@@ -13,6 +13,7 @@ let
     waybar = "waybar";
     kitty = "kitty";
     # helix = "helix";
+    wofi = "wofi";
     Thunar = "Thunar";
   };
 
