@@ -180,10 +180,10 @@
     valgrind
     gdb
     julia
-    raylib
     probe-rs-tools
     espflash
     texliveFull
+    # openjdk15
 
     # util-apps
     xfce.tumbler
@@ -266,7 +266,19 @@
   # networking.firewall.enable = false;
 
   networking.firewall.checkReversePath = "loose";
-
+  
+  # VirtualBox
+  virtualisation.virtualbox.host.enable = true;   # pulls in the kernel modules
+  boot.kernelModules = [ "vboxdrv" "vboxnetflt" "vboxnetadp" ];
+  virtualisation.libvirtd.enable = true;
+  users.extraUsers.leverlars = {
+    isNormalUser = true;
+    extraGroups = [ 
+                    "vboxusers"
+                    "libvirtd"
+                  ];   # needed for shared‑folder mounts
+  };
+  
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05";
