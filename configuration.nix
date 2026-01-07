@@ -38,6 +38,20 @@
     };
   };
 
+  hardware.graphics.enable = true;
+    services.xserver.videoDrivers = [
+      "modesetting"
+      "nvidia"
+    ];
+
+  hardware.nvidia.open = true;
+
+  hardware.nvidia.prime = {
+    intelBusId = "PCI:0:2:0";
+    nvidiaBusId = "PCI:45:0:0";
+    #amdgpuBusId = "PCI:54:0:0"; # If you have an AMD iGPU
+  };
+
   services.blueman.enable = true;
 
   services.thermald.enable = true;
@@ -194,6 +208,8 @@
     fastfetch
     discord
     steam
+    gamescope
+    vulkan-tools
     btop
     gdu
     ranger
