@@ -60,6 +60,10 @@
   services.thermald.enable = true;
   services.tlp.enable = true;
 
+  #services.boinc.enable = true;
+  #services.boinc.extraEnvPackages = [ pkgs.libglvnd pkgs.brotli ];
+  #users.users.leverlars.extraGroups = [ "boinc" ];
+
   zramSwap.enable = true;
 
   time.timeZone = "Europe/Copenhagen";
@@ -233,6 +237,8 @@
     wxhexeditor
     gnome-screenshot
     networkmanagerapplet
+    cheese
+    imagemagick
 
     # audio-control
     pavucontrol
@@ -301,17 +307,21 @@
   networking.firewall.checkReversePath = "loose";
   
   # VirtualBox
-  virtualisation.virtualbox.host.enable = true;   # pulls in the kernel modules
-  boot.kernelModules = [ "vboxdrv" "vboxnetflt" "vboxnetadp" "thunderbolt" ];
-  virtualisation.libvirtd.enable = true;
-  users.extraUsers.leverlars = {
-    isNormalUser = true;
-    extraGroups = [ 
-                    "vboxusers"
-                    "libvirtd"
-                  ];   # needed for shared‑folder mounts
-  };
+  #virtualisation.virtualbox.host.enable = true;   # pulls in the kernel modules
+  #boot.kernelModules = [ "vboxdrv" "vboxnetflt" "vboxnetadp" "thunderbolt" ];
+  #virtualisation.libvirtd.enable = true;
+  #users.extraUsers.leverlars = {
+  #  isNormalUser = true;
+  #  extraGroups = [ 
+  #                  "vboxusers"
+  #                  "libvirtd"
+  #                ];   # needed for shared‑folder mounts
+  #};
   
+  virtualisation.virtualbox.host.enable = true;
+    users.extraGroups.vboxusers.members = [ "leverlars" ];
+    virtualisation.virtualbox.host.enableExtensionPack = true;
+
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "25.05";
