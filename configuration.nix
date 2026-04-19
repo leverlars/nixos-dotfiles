@@ -52,6 +52,10 @@
     #amdgpuBusId = "PCI:54:0:0"; # If you have an AMD iGPU
   };
 
+  ###
+  hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
+  ###
+
   networking.networkmanager.wifi.backend = "wpa_supplicant";
   networking.useNetworkd = false;
 
@@ -133,6 +137,24 @@
 
   programs.zsh.enable = true;
 
+  environment.etc."distrobox/distrobox.conf".text = ''
+    container_additional_volumes="
+      /nix/store:/nix/store:ro
+      /etc/profiles/per-user:/etc/profiles/per-user:ro
+      /etc/static/profiles/per-user:/etc/static/profiles/per-user:ro
+      /run/current-system/sw/bin:/run/current-system/sw/bin:ro
+    "
+  '';
+
+  #environment.etc."distrobox/distrobox.conf".text = ''
+  #  container_additional_volumes="
+  #    /nix/store:/nix/store:ro
+  #    /etc/profiles/per-user:/etc/profiles/per-user:ro
+  #    /etc/static/profiles/per-user:/etc/static/profiles/per-user:ro
+  #    /run/current-system/sw/bin:/run/current-system/sw/bin:ro
+  #  "
+  #'';
+
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -158,6 +180,7 @@
     gh
     sublime
     vscode
+    distrobox
 
     #themes and waybar
     sassc
@@ -318,6 +341,11 @@
   #                ];   # needed for shared‑folder mounts
   #};
   
+  virtualisation.podman = {
+    enable = true;
+    dockerCompat = true;
+  };
+
   virtualisation.virtualbox.host.enable = true;
     users.extraGroups.vboxusers.members = [ "leverlars" ];
     virtualisation.virtualbox.host.enableExtensionPack = true;

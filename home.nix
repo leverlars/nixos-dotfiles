@@ -68,6 +68,10 @@ in
       theme = "agnoster";
     };
 
+    initExtra = ''
+      export ZSH_DISABLE_COMPFIX=true
+    '';
+
   };
 
   programs.git = {
