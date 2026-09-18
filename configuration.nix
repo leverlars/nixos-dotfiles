@@ -15,6 +15,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  boot.kernelModules = [ "kvm-intel" ];
+
   networking.hostName = "nixos";
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -39,20 +41,33 @@
   };
 
   hardware.graphics.enable = true;
-    services.xserver.videoDrivers = [
-      "modesetting"
-      "nvidia"
-    ];
 
-  hardware.nvidia.open = true;
+  services.xserver.videoDrivers = [
+    "modesetting"
+    "nvidia"
+  ];
+
+  services.udev.extraRules = '' # For Vivado
+    ATTRS{idVendor}=="1443", MODE:="0666"
+    ACTION=="add", ATTRS{idVendor}=="0403", ATTRS{manufacturer}=="Digilent", MODE:="0666"
+  '';
+
+  hardware.nvidia.open = true; #true for Sway and false for gnome. Maybe false for both?
 
   hardware.nvidia.prime = {
     intelBusId = "PCI:0:2:0";
     nvidiaBusId = "PCI:45:0:0";
+    #nvidiaBusId = "PCI:1:0:0";
     #amdgpuBusId = "PCI:54:0:0"; # If you have an AMD iGPU
   };
 
+  hardware.nvidia = {
+    #open = false; #true for Sway and false for gnome. Maybe false for both?
+    modesetting.enable = true;
+  };
+
   ###
+  #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.stable;
   ###
 
@@ -62,11 +77,8 @@
   services.blueman.enable = true;
 
   services.thermald.enable = true;
-  services.tlp.enable = true;
-
-  #services.boinc.enable = true;
-  #services.boinc.extraEnvPackages = [ pkgs.libglvnd pkgs.brotli ];
-  #users.users.leverlars.extraGroups = [ "boinc" ];
+  services.tlp.enable = true; #true for Sway and false for gnome
+  services.power-profiles-daemon.enable = false; #false for Sway and true for Gnome?
 
   zramSwap.enable = true;
 
@@ -96,20 +108,24 @@
     enable = true;
     autoRepeatDelay = 200;
     autoRepeatInterval = 35;
+
+    #displayManager.gdm.enable = true; #gnome
+    #displayManager.gdm.wayland = true; #gnome
+    #desktopManager.gnome.enable = true; #gnome
+
   };
-  services.displayManager.ly.enable = true;
+  services.displayManager.ly.enable = true; #true for Sway and false for X11
 
   ##services.greetd.enable = true;
 
   security.polkit.enable = true;
-  hardware.opengl.enable = true;
+  #hardware.opengl.enable = true; # Outdated?
 
   services.gnome.gnome-keyring.enable = true;
 
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
-
   };
 
   console.keyMap = "dk-latin1";
@@ -121,14 +137,12 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "docker"
+      "libvirtd"
     ];
     packages = with pkgs; [
       tree
     ];
-
-    # openssh.authorizedKeys.keys = [
-    #   "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDue4ioV62xLc44Oe+jJ9fY47xu4P+zrX9Da6WfOB5igEGHnOnSRrWZpBCNKJBhR/AXlWLSRoxJsCgFcEz+90IJx6HqOlfWJS3tp34/GXmfxZ/qfOeFfEJsHQ4agYyhIeNKtlzOTVTuNimlqiKHYXAs1SXfljt6J/4pWuQib090cLA4h8wURRKsjUNFMN6cTADiVXZuVO+oo7+LhAXGe3L0WMS4IiTEePVmGFRgM1L99o6pEK0RWJNdqsN+F/s1ymV0PAkq5UN+GBPyYpDcMT/5gV45BxLwfsU9RFdIKVsmfIF4m3Tccq1E7umqfn8YOhpobfrMJmw2IVk6UGztfJ+88G1Ta52U3mwr59stirCe/JpjAwABFF9gNiHGA7JWzzMnW16BFLVRkxOZCende/VFtGR9bfZDa0gDVtcogcy4qKktLRgoD7o+Jit0wRip4dghxii01laS9leUP8r2FBqeuQPg6Jm4dbbv2TY0hSn0vnD5gZqjiL7rDmoQupzivYk= jimmy"
-    # ];
   };
 
   programs.firefox.enable = true;
@@ -136,6 +150,38 @@
   programs.steam.enable = true;
 
   programs.zsh.enable = true;
+
+  # OpenCode configuration
+  environment.etc."opencode-user.json".text = builtins.toJSON {
+    "$schema" = "https://opencode.ai/config.json";
+
+    model = "infomaniak/moonshotai/Kimi-K2.6";
+
+    provider.infomaniak = {
+      npm = "@ai-sdk/openai-compatible";
+      name = "Infomaniak";
+
+      options = {
+        baseURL =
+          "https://api.infomaniak.com/2/ai/YOUR_PRODUCT_ID/openai/v1";
+      };
+
+      models."moonshotai/Kimi-K2.6" = {
+        name = "Kimi K2.6 (Infomaniak)";
+
+        limit = {
+          context = 256000;
+        };
+      };
+    };
+  };
+
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+
+    # Tell OpenCode to load our declarative NixOS config.
+    OPENCODE_CONFIG = "/etc/opencode-user.json";
+  };
 
   environment.etc."distrobox/distrobox.conf".text = ''
     container_additional_volumes="
@@ -235,6 +281,9 @@
     rars
     gnumake
     # openjdk15
+    nvidia-container-toolkit
+    libnvidia-container
+    opencode
 
     # util-apps
     xfce.tumbler
@@ -244,7 +293,16 @@
     neofetch
     fastfetch
     discord-canary
+    vesktop
     steam
+    #(prismlauncher.override {
+    #  jdks = [
+    #    jdk25
+    #    jdk21
+    #    jdk17
+    #    jdk8
+    #  ];
+    #})
     gamescope
     vulkan-tools
     btop
@@ -262,6 +320,7 @@
     networkmanagerapplet
     cheese
     imagemagick
+    flameshot
 
     # audio-control
     pavucontrol
@@ -294,8 +353,6 @@
     "nix-command"
     "flakes"
   ];
-
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -341,16 +398,48 @@
   #                ];   # needed for shared‑folder mounts
   #};
   
-  virtualisation.podman = {
+  #virtualisation.podman = {
+  #  enable = true;
+  #  dockerCompat = true;
+  #};
+
+  hardware.nvidia-container-toolkit.enable = true;
+
+  virtualisation.containers = {
     enable = true;
-    dockerCompat = true;
+
+    policy = {
+      default = [ { type = "insecureAcceptAnything"; } ]; # Insecure much? xd
+    };
   };
 
-  virtualisation.virtualbox.host.enable = true;
-    users.extraGroups.vboxusers.members = [ "leverlars" ];
-    virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.docker = {
+    enable = true;
+    enableNvidia = true;
+  };
+
+  #virtualisation.virtualbox.host.enable = true;
+  #  users.extraGroups.vboxusers.members = [ "leverlars" ];
+  #  virtualisation.virtualbox.host.enableExtensionPack = true;
+
+  virtualisation.libvirtd = {
+    enable = true;
+
+    qemu = {
+      package = pkgs.qemu_kvm;
+      runAsRoot = false;
+
+      vhostUserPackages = with pkgs; [
+        virtiofsd
+      ];
+    };
+  };
+
+  programs.virt-manager.enable = true;
+
+  virtualisation.spiceUSBRedirection.enable = true;
 
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "25.05";
+  system.stateVersion = "25.11";
 }
